@@ -2,12 +2,20 @@ require("dotenv/config")
 const express = require("express");
 const app = express();
 const port = 3300;
-const mongoose = require("mongoose")
-const connect = require('./config/db')
+const mongoose = require("mongoose");
+const connect = require('./config/db');
+
+const userRouter = require('./routes/userRoute');
+const taskRouter = require('./routes/taskRoute');
+
+// middlewares
+app.use(express.json());
 
 
-
-
+// API'S
+app.use('/api/v1',userRouter);
+app.use('/api/v1',taskRouter);
+// server connection and DB
 connect()
 .then(()=>{
     try {
@@ -24,7 +32,10 @@ connect()
 })
 
 
-
 app.get('/',(req,res)=>{
     res.send('Hello world')
+})
+
+app.use((req,res)=>{
+    res.send('route doesntr exist')
 })
